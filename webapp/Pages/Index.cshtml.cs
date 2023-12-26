@@ -9,6 +9,7 @@ namespace webapp.Pages
     {
 
         public List<Product> Products;
+        public bool IsBeta;
 
         private readonly IProductService _productService;
 
@@ -20,6 +21,7 @@ namespace webapp.Pages
         public void OnGet()
         {
             Products = _productService.GetProducts();
+            IsBeta = _productService.IsBeta().Result;
         }
     }
 }
