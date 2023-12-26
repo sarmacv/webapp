@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Microsoft.FeatureManagement;
 using webapp.Models;
 
 namespace webapp.Services
@@ -7,10 +8,20 @@ namespace webapp.Services
     {
 
         private readonly IConfiguration _configuration;
+        private readonly IFeatureManager _featureManager;
 
-        public ProductService(IConfiguration configuration)
+        public ProductService(IConfiguration configuration, IFeatureManager featureManager)
         {
             _configuration = configuration;
+            _featureManager = featureManager;
+        }
+
+        public async Task<bool> IsBeta ()
+        {
+            if (await _featureManager.IsEnabledAsync("beta"))
+                return true;
+            else 
+                return false;
         }
 
         private SqlConnection GetConnection()

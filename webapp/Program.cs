@@ -1,3 +1,4 @@
+using Microsoft.FeatureManagement;
 using webapp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,8 @@ var connectionStringAppConfig = "Endpoint=https://vcwebappconfig.azconfig.io;Id=
 
 builder.Host.ConfigureAppConfiguration(builder =>
 {
-    builder.AddAzureAppConfiguration(connectionStringAppConfig);
+    builder.AddAzureAppConfiguration(options => 
+    options.Connect(connectionStringAppConfig).UseFeatureFlags());
 });
 
 
@@ -14,6 +16,8 @@ builder.Services.AddTransient<IProductService, ProductService>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 
